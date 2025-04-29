@@ -1,2 +1,5 @@
 /target
 .DS_Store
+
+# Don't track WASM build artifacts.
+web/layered.wasm
