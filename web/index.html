@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Common meta tags for device compatibility -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Article and SEO meta tags -->
+    <meta name="author" content="With Caer, LLC">
+
+    <!-- Stylistic meta tags for user agents that support them -->
+    <meta name="theme-color" content="#E48C35" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#262622" media="(prefers-color-scheme: dark)">
+
+    <!-- Page title -->
+    <title>
+        Layered
+    </title>
+
+    <style>
+        html,
+        body,
+        canvas {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            background: #262622;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="glcanvas" tabindex='1'></canvas>
+    <script src="macroquad.js"></script>
+    <script>load("layered.wasm");</script>
+</body>
+</html>

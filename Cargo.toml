@@ -1,0 +1,40 @@
+[package]
+name = "layered"
+description = "2D graphics engine for building interactive media driven by Codas."
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-only"
+readme = "README.md"
+repository = "https://gitlab.com/caer/cosi"
+authors = [
+    "With Caer, LLC <hi@caer.cc>",
+]
+
+# Miniquad test binaries.
+[[bin]]
+name = "mini"
+path = "src/mini.rs"
+
+[dependencies]
+# codas = { git = "https://gitlab.com/alicorn/pub/alicorn" }
+# codas-flow = { git = "https://gitlab.com/alicorn/pub/alicorn" }
+# codas-macros = { git = "https://gitlab.com/alicorn/pub/alicorn" }
+
+# Vector math.
+glam = { version = "0.27.0", default-features = false, features = ["libm"] }
+
+# Image processing
+image = { version = "0.25.5", default-features = false, features = ["png", "bmp"] }
+
+# 2D game engine
+macroquad = { version = "0.4.14", default-features = false, features = ["audio"] }
+miniquad = { version = "0.4.8" }
+
+# Color manipulation.
+palette = { version = "0.7.6", default-features = false, features = ["libm"] }
+
+# 3D asset processing
+# gltf = "1.4.1"
+# wgpu = "24.0.3"
+# bytemuck = { version = "1.22.0", features = ["derive"] }
+# tokio = { version = "1.44.1", features = ["full"] }
