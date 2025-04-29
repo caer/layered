@@ -39,7 +39,5 @@
                 "terminal.integrated.localEchoLatencyThreshold": 10
             }
         }
-    },
-
-    "postCreateCommand": "sh ./.devcontainer/post-create.sh"
+    }
 }
