@@ -225,57 +225,63 @@ fn draw_layer(state: &mut LayerState) -> Option<usize> {
 
     // Configure position translation.
     let last_pos = state.cosy_pos;
+    let cosy_pos = Vec2::from(state.cosy_pos);
 
     // Velocity between frames should be stable.
     let frame_time = macroquad::prelude::get_frame_time();
     let velocity = 22.0 * frame_time;
 
-    // If true, translation will move relative to
-    // the viewport instead of the grid system.
-    const VIEWPORT_RELATIVE_TRANSLATION: bool = true;
+    // Calculate the _target_ position for the sprite.
+    let mut target_pos = cosy_pos;
 
-    // Process keyboard input.
-    if macroquad::prelude::is_key_down(KeyCode::W) {
-        if VIEWPORT_RELATIVE_TRANSLATION {
-            state.cosy_pos.0 -= velocity;
+    // If the mouse is held, move the sprite towards the cursor.
+    if macroquad::prelude::is_mouse_button_down(miniquad::MouseButton::Left) {
+        let mouse_pos = state.mouse_pos;
+        target_pos = state
+            .map
+            .view_to_grid(mouse_pos.x, mouse_pos.y, state.active_layer);
+
+    // Otherwise, move the sprite "towards" any
+    // held WASD keys, relative to screen-space.
+    } else {
+        if macroquad::prelude::is_key_down(KeyCode::W) {
+            target_pos.x -= 1.0;
+            target_pos.y -= 1.0;
+        } else if macroquad::prelude::is_key_down(KeyCode::S) {
+            target_pos.x += 1.0;
+            target_pos.y += 1.0;
         }
 
-        state.cosy_pos.1 -= velocity;
-        state.cosy_sprite = SPRITE_BACK;
-        state.cosy_flip = true;
-    }
-
-    if macroquad::prelude::is_key_down(KeyCode::S) {
-        if VIEWPORT_RELATIVE_TRANSLATION {
-            state.cosy_pos.0 += velocity;
+        if macroquad::prelude::is_key_down(KeyCode::A) {
+            target_pos.x -= 1.0;
+            target_pos.y += 1.0;
+        } else if macroquad::prelude::is_key_down(KeyCode::D) {
+            target_pos.x += 1.0;
+            target_pos.y -= 1.0;
         }
-
-        state.cosy_pos.1 += velocity;
-        state.cosy_sprite = SPRITE;
     }
 
-    if macroquad::prelude::is_key_down(KeyCode::A) {
-        if VIEWPORT_RELATIVE_TRANSLATION {
-            state.cosy_pos.1 += velocity / 2.0;
-            state.cosy_pos.0 -= velocity / 2.0;
+    // Perform a linear interpolation if the sprite should move.
+    let dx = target_pos.x - cosy_pos.x;
+    let dy = target_pos.y - cosy_pos.y;
+    let distance = (dx * dx + dy * dy).sqrt();
+    if distance.abs() >= 0.1 {
+        // Interpolate by a constant velocity so
+        // that movement doesn't slow down when the
+        // sprite is close to the target.
+        let lerp_step = velocity / distance;
+        state.cosy_pos.0 = cosy_pos.x + (target_pos.x - cosy_pos.x) * lerp_step;
+        state.cosy_pos.1 = cosy_pos.y + (target_pos.y - cosy_pos.y) * lerp_step;
+
+        // Show the back of the sprite during "upwards" motion.
+        state.cosy_sprite = if cosy_pos.y > target_pos.y {
+            SPRITE_BACK
         } else {
-            state.cosy_pos.0 -= velocity;
-        }
+            SPRITE
+        };
 
-        state.cosy_sprite = SPRITE;
-        state.cosy_flip = false;
-    }
-
-    if macroquad::prelude::is_key_down(KeyCode::D) {
-        if VIEWPORT_RELATIVE_TRANSLATION {
-            state.cosy_pos.1 -= velocity / 2.0;
-            state.cosy_pos.0 += velocity / 2.0;
-        } else {
-            state.cosy_pos.0 += velocity;
-        }
-
-        state.cosy_sprite = SPRITE;
-        state.cosy_flip = true;
+        // Flip the sprite during "rightwards" motion.
+        state.cosy_flip = cosy_pos.x < target_pos.x;
     }
 
     // Only permit moves which keep the avatar on the field.

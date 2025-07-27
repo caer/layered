@@ -355,7 +355,7 @@ impl TileMap {
 
     /// Converts a planar grid point to a view point
     /// (in physical pixels) within an axonometric projection.
-    fn grid_to_view(&self, x: f32, y: f32, layer: i8) -> Vec2 {
+    pub fn grid_to_view(&self, x: f32, y: f32, layer: i8) -> Vec2 {
         let view_size = self.calculate_view_size();
         let tile_size = self.calculate_tile_size();
 
