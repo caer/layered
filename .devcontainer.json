@@ -1,3 +1,3 @@
 {
-    "image": "ghcr.io/with-caer/workbench-rust:latest"
+    "image": "ghcr.io/with-caer/owc/workbench:latest"
 }
