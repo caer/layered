@@ -1,3 +1,7 @@
 {
-    "image": "ghcr.io/with-caer/owc/workbench:latest"
+    "image": "ghcr.io/with-caer/owc/workbench:latest",
+    "features": {
+        // Macroquad native libraries.
+        "ghcr.io/with-caer/owc/workbench/macroquad:latest": {}
+    }
 }

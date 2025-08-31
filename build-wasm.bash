@@ -20,3 +20,4 @@
 
 cargo build --release --target wasm32-unknown-unknown
 cp target/wasm32-unknown-unknown/release/layered.wasm web/layered.wasm
+cargo server --path web/
