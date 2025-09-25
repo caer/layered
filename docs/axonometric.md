@@ -1,6 +1,3 @@
-Although it's named `CONTRIBUTING`, this is a general document on
-useful things I (Caer) learned while building out Cosi. In no particular order.
-
 ## Getting Perspective: `isometric` + `dimetric` Projections
 
 In the context of 2D video game graphics, the word **Isometric** conjures
