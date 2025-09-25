@@ -265,7 +265,12 @@ fn draw_layer(state: &mut LayerState) -> Option<usize> {
     let dx = target_pos.x - cosy_pos.x;
     let dy = target_pos.y - cosy_pos.y;
     let distance = (dx * dx + dy * dy).sqrt();
-    if distance.abs() >= 0.1 {
+
+    // Only perform a move if the sprite would move
+    // one unit or more. Without this check, the
+    // sprite will appear to move erratically when
+    // the target location is _very_ close to the sprite.
+    if distance.abs() >= 1.0 {
         // Interpolate by a constant velocity so
         // that movement doesn't slow down when the
         // sprite is close to the target.
