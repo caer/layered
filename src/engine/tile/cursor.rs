@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::color;
+use crate::engine::color;
 
 use super::{Tile, TileMap};
 

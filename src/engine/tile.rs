@@ -11,7 +11,7 @@ use macroquad::{
 use miniquad::MipmapFilterMode;
 use palette::WithAlpha;
 
-use crate::color::{self, *};
+use super::color::{self, *};
 
 // When tightly packed, tiles in dimetric
 // projections are, visually, twice as wide

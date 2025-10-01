@@ -5,6 +5,7 @@ This file contains a chronological list of all major changes made to this crate.
 ### 🚀 Features
 
 - Refactor movement to be target-based with lerps, supporting wasd and touch/mouse controls
+- Partially decouple game and engine logic
 
 ### 🐛 Fixes
 
