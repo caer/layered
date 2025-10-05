@@ -2,6 +2,7 @@
 
 pub mod assets;
 pub mod config;
+pub mod level_loader;
 pub mod phase;
 pub mod state;
 

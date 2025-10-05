@@ -2,6 +2,7 @@
 
 use super::assets::*;
 use super::config::*;
+use super::level_loader::LayeredColorMapper;
 use super::phase::SystemPhase;
 use crate::engine::color::{self, Color};
 use crate::engine::tile::{Tile, TileMap, TileTexture};
@@ -167,12 +168,15 @@ fn draw_layer(state: &mut LayerState) -> Option<usize> {
     }
 
     // Reset active tile colors.
-    state.map.set_tiles_from_bitmap(
-        &state.tilemaps[state.active_tilemap_index],
-        state.active_layer,
+    let mut mapper = LayeredColorMapper::new(
         state.wall_tile_texture.clone(),
         state.floor_tile_texture.clone(),
         0.75,
+    );
+    state.map.load_from_bitmap_with(
+        &state.tilemaps[state.active_tilemap_index],
+        state.active_layer,
+        |x, y, color| mapper.map_pixel(x, y, color),
     );
 
     // Calculate mouse delta.
@@ -673,14 +677,17 @@ impl LayerState {
             }
         }
 
+        let mut mapper = LayeredColorMapper::new(
+            self.wall_tile_texture.clone(),
+            self.floor_tile_texture.clone(),
+            0.75,
+        );
         self.cosy_pos = self
             .map
-            .set_tiles_from_bitmap(
+            .load_from_bitmap_with(
                 &self.tilemaps[self.active_tilemap_index],
                 self.active_layer,
-                self.wall_tile_texture.clone(),
-                self.floor_tile_texture.clone(),
-                0.75,
+                |x, y, color| mapper.map_pixel(x, y, color),
             )
             .unwrap();
         self.completed_objective_lines.clear();

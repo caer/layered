@@ -44,8 +44,8 @@ The `tile.rs` module has hardcoded game logic based on specific color meanings:
 - The `tile_has_color()` and `flood_fill_tiles()` methods are designed around these game-specific colors
 
 **Tasks:**
-1. [ ] Create `TileMapBuilder` trait/struct in engine
-2. [ ] Refactor `set_tiles_from_bitmap()` to accept a color mapping callback:
+1. [x] Create `TileMapBuilder` trait/struct in engine
+2. [x] Refactor `set_tiles_from_bitmap()` to accept a color mapping callback:
    ```rust
    pub fn set_tiles_from_bitmap<F>(
        &mut self,
@@ -56,11 +56,11 @@ The `tile.rs` module has hardcoded game logic based on specific color meanings:
    where
        F: Fn(u32, u32, Rgba<u8>) -> Option<Tile>,
    ```
-3. [ ] Move color-to-tile-type mapping logic to `src/game/level_loader.rs`
-4. [ ] Make `tile_has_color()` more generic or move to game code
-5. [ ] Make `flood_fill_tiles()` accept color parameters instead of using constants
-6. [ ] Update game code to provide color mapping functions
-7. [ ] Remove hardcoded `color::ACCENT_*` references from engine code
+3. [x] Move color-to-tile-type mapping logic to `src/game/level_loader.rs`
+4. [x] Make `tile_has_color()` more generic or move to game code
+5. [x] Make `flood_fill_tiles()` accept color parameters instead of using constants
+6. [x] Update game code to provide color mapping functions
+7. [x] Remove hardcoded `color::ACCENT_*` references from engine code
 
 **Success Criteria:**
 - Engine code has no knowledge of specific color meanings
