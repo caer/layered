@@ -33,6 +33,6 @@ fn main() {
             fullscreen: false,
             ..Default::default()
         },
-        layered::simulation_loop(),
+        layered::game::simulation_loop(),
     );
 }

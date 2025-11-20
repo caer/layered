@@ -2,7 +2,6 @@
 use std::collections::BTreeMap;
 
 use glam::{Mat2, Vec2};
-use image::{DynamicImage, GenericImageView};
 use macroquad::{
     color::{GRAY, WHITE},
     math::Rect,
@@ -11,7 +10,10 @@ use macroquad::{
 use miniquad::MipmapFilterMode;
 use palette::WithAlpha;
 
-use crate::color::{self, *};
+use super::color::{self, *};
+
+pub mod builder;
+pub use builder::{ColorMapper, FnColorMapper, TileLoadResult};
 
 // When tightly packed, tiles in dimetric
 // projections are, visually, twice as wide
@@ -407,82 +409,6 @@ impl TileMap {
         self.unit_to_pixel_transform()
             .inverse()
             .mul_vec2((x, y).into())
-    }
-
-    /// FIXME: This function makes so many non-generalizable assumptions:
-    ///
-    /// 1. [`color::BACKGROUND`] in `bitmap` renders a `wall_texture`.
-    /// 2. [`color::ACCENT_1`], [`color::ACCENT_2`], and [`color::ACCENT_3`]
-    ///    in `bitmap` renders a an accent-blended `floor_texture`.
-    /// 3. [`color::ACCENT_3`] in `bitmap` causes a coordinate to
-    ///    be returned indicating an avatar spawn point.
-    /// 4. Any other color renders a `floor_texture` with no blended color.
-    pub fn set_tiles_from_bitmap(
-        &mut self,
-        bitmap: &DynamicImage,
-        layer: i8,
-        wall_texture: TileTexture,
-        floor_texture: TileTexture,
-        floor_opacity: f32,
-    ) -> Option<(f32, f32)> {
-        // Different colors mean different things!
-        let wall_color: [u8; 4] = color::BACKGROUND.into();
-        let objective_color: [u8; 4] = color::ACCENT_1.into();
-        let danger_color: [u8; 4] = color::ACCENT_2.into();
-        let avatar_color: [u8; 4] = color::ACCENT_3.into();
-
-        // Track the latest avatar spawn point.
-        let mut avatar_spawn_point = None;
-
-        // Set all tiles from the bitmap.
-        for (x, y, color) in bitmap.pixels() {
-            let x = x as usize;
-            let y = y as usize;
-
-            // Color match for tile rendering.
-            if color.0 == wall_color {
-                self.set_tile(
-                    x,
-                    y,
-                    layer,
-                    Tile::Filled {
-                        texture: wall_texture.clone(),
-                        height_offset: None,
-                        blend_color: None,
-                    },
-                );
-            } else {
-                let blend_color = if color.0 == objective_color {
-                    Some(color::ACCENT_1)
-                } else if color.0 == danger_color {
-                    Some(color::ACCENT_2)
-                } else if color.0 == avatar_color {
-                    Some(color::ACCENT_3)
-                } else {
-                    let mut color = color::DEFAULT;
-                    color.alpha = (floor_opacity * 255.) as u8;
-                    Some(color)
-                };
-
-                self.set_tile(
-                    x,
-                    y,
-                    layer,
-                    Tile::Filled {
-                        texture: floor_texture.clone(),
-                        height_offset: None,
-                        blend_color,
-                    },
-                );
-            }
-
-            // Update avatar spawn point, if detected.
-            if color.0 == avatar_color {
-                avatar_spawn_point = Some((x as f32, y as f32));
-            }
-        }
-
-        avatar_spawn_point
     }
 
     /// TODO:

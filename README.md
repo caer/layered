@@ -30,6 +30,5 @@ Art assets and Layered-specific code are copyright
 
 All other content in this repository is copyright 2025 With Caer, LLC.
 
-Licensed under the GNU Affero General Public License version 3,
-as published by the Free Software Foundation. Refer to 
-[the license file](LICENSE.txt) for more information.
+Licensed under the Functional Source License, Version 1.1, MIT Future License.
+Refer to [the license file](LICENSE.md) for more info.
